@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="cityselect.css">
+    <link rel="stylesheet" href="iconfont/iconfont.css">
+    <style>
+        body {
+            padding: 80px;
+            text-align: center;
+        }
+        .layout {
+            padding: 20px;
+            width: 800px;
+            margin: 0 auto;
+            box-shadow: 0px 0px 12px rgba(128,128,128,0.3);
+        }
+        #citySelect {
+            width: 278px;
+            height: 30px;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid rgba(128,128,128,0.3);
+            border-right: none;
+            color: rgba(128,128,128,0.8);
+            outline: 1px solid rgba(128,128,128,0.3);
+        }
+        #btn {
+            background-color: rgba(128,128,128,0.8);
+            border: 1px solid rgba(128,128,128,0.3);
+            width: 90px;
+            height: 30px;
+            font-size: 14px;
+            color: white;
+            outline: 1px solid rgba(128,128,128,0.8);
+        }
+        .width90 {
+            width: 120px !important;
+        }
+        #today{
+            display: inline-block;
+            margin-top: 20px;
+            /*margin-bottom: 20px;*/
+            margin-left: 110px;
+        }
+        #tomorrow,#after_tomorrow,#tdfn{
+            display: inline-block;
+            margin: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            margin-left: 20px;
+            margin-right: 20px;
+            /*border-bottom: 1px solid rgba(128,128,128,0.8);*/
+            /*border-right:1px solid rgba(128,128,128,0.3);*/
+        }
+        #after_tomorrow {
+            border: none;
+        }
+        .hide {
+            display: none;
+        }
+        #codeby {
+            text-align: right;
+            display: block;
+        }
+        p {
+            margin-right: 25px;
+            margin-left: 25px;
+
+        }
+        #temp-now{
+            display: inline-block;
+            float: right;
+        }
+        #today>p,#tomorrow>p,#after_tomorrow>p,#tdfn>p{
+            color: rgb(128,128,128);
+            font-size: 20px;
+            font-style: normal;
+            margin: 10px;
+        }
+        .active {
+            color: rgba(128,128,128,1);
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class='layout'>
+<div class="demo">
+    <input type="text" class="cityinput" id="citySelect" placeholder="请输入查询城市,默认为系统定位城市"><button id="btn">点我看天气</button>
+</div>
+<div>
+    <div id='today'>
+        <p class='date'></p>
+        <p class='wea'></p>
+        <p class='wind'></p>
+        <p class="temp"></p>
+    </div>
+    <div id='temp-now'>
+        <p class='iconfont'>&#xe606;</p>
+    </div>
+</div>
+<div id='tomorrow'>
+    <p class='date '></p>
+    <p class='wea'></p>
+    <p class='wind'></p>
+    <p class="temp"></p>
+</div>
+<div id='after_tomorrow'>
+    <p class='date'></p>
+    <p class='wea'></p>
+    <p class='wind'></p>
+    <p class="temp"></p>
+</div>
+<div id='tdfn'>
+    <p class='date'></p>
+    <p class='wea'></p>
+    <p class='wind'></p>
+    <p class="temp"></p>
+</div>
+<span id='codeby'>code by lck</span>
+</div>
+<script>
+    var input = document.querySelector('#citySelect')
+    var btn = document.querySelector('#btn')
+    var today = document.querySelector('#today')
+    btn.addEventListener('click',function(){
+      var script = document.createElement('script')
+      script.src = 'https://jirenguapi.applinzi.com/weather.php?city='+input.value+'&callback=getCity'
+      document.body.appendChild(script)
+      document.body.removeChild(script)
+    })
+
+    function getCity(city){
+      var weatherNow = city.results[0].weather_data[0].date
+      var date = weatherNow.substr(0,9)
+      var temp = weatherNow.substr(14,3)
+      var arr = ['&#xe62c;','&#xe62e;','&#xe62f;','&#xe630;','&#xe631;','&#xe632;','&#xe633;','&#xe634;','&#xe635;','&#xe636;']
+      var newTemp = arr[parseInt(temp[0])]+arr[parseInt(temp[1])]
+
+      console.log(typeof arr[2])
+      console.log(arr[2])
+      console.log(newTemp)
+
+
+
+
+      document.querySelector('#temp-now p').innerText = temp
+      document.querySelector('#temp-now p').classList.add('active');
+      document.querySelector('#today .date').innerText = date
+      document.querySelector('#today .wea').innerText = city.results[0].weather_data[0].weather
+      document.querySelector('#today .wind').innerText = city.results[0].weather_data[0].wind
+      document.querySelector('#today .temp').innerText = city.results[0].weather_data[0].temperature
+
+      document.querySelector('#tomorrow .date').innerText = city.results[0].weather_data[1].date
+      document.querySelector('#tomorrow .wea').innerText = city.results[0].weather_data[1].weather
+      document.querySelector('#tomorrow .wind').innerText = city.results[0].weather_data[1].wind
+      document.querySelector('#tomorrow .temp').innerText = city.results[0].weather_data[1].temperature
+
+      document.querySelector('#after_tomorrow .date').innerText = city.results[0].weather_data[2].date
+      document.querySelector('#after_tomorrow .wea').innerText = city.results[0].weather_data[2].weather
+      document.querySelector('#after_tomorrow .wind').innerText = city.results[0].weather_data[2].wind
+      document.querySelector('#after_tomorrow .temp').innerText = city.results[0].weather_data[2].temperature
+
+      document.querySelector('#tdfn .date').innerText = city.results[0].weather_data[3].date
+      document.querySelector('#tdfn .wea').innerText = city.results[0].weather_data[3].weather
+      document.querySelector('#tdfn .wind').innerText = city.results[0].weather_data[3].wind
+      document.querySelector('#tdfn .temp').innerText = city.results[0].weather_data[3].temperature
+
+
+      document.querySelector('#codeby').innerText = 'enjoy your day'
+      input.placeholder = city.results[0].currentCity
+      input.classList.add('width90')
+      
+    }
+
+</script>
+<script type="text/javascript" src="cityselect.js"></script>
+<script type="text/javascript">var test=new Vcity.CitySelector({input:'citySelect'});</script>
+</body>
+</html>
