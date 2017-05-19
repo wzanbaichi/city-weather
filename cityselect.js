@@ -236,7 +236,12 @@ Vcity.CitySelector.prototype = {
     });
     div.className = 'citySelector';
     div.style.position = 'absolute';
-    div.style.left = inputPos.left + 'px';
+    if(window.navigator.userAgent.search('windows')){
+      div.style.left = inputPos.left + 'px';
+    }else{
+        div.style.left = 290+'px';
+    }
+    // div.style.left = inputPos.left + 'px';
     div.style.top = inputPos.bottom + 5 + 'px';
     div.style.zIndex = 999999;
 
